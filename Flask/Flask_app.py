@@ -11,7 +11,10 @@ routes_dic = {
     "/api/v1.0/all_countries": "Get a list of all available countries in the database.",
 }
 
-# Define a route to get the list of routes and their descriptions
+#################################################
+# Flask Routes
+#################################################
+# 1. Define static routes
 @app.route("/")
 def get_routes():
     return jsonify(routes_dic)
@@ -46,5 +49,6 @@ def get_all_countries():
 
     return jsonify(all_countries)
 
+# 1. Define main behaviour
 if __name__ == "__main__":
     app.run(debug=True)
