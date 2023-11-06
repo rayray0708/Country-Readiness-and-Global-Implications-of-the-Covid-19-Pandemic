@@ -21,7 +21,7 @@ routes_dict = {
 # Flask Routes
 #################################################
 # 1. Define static routes
-@app.route("/api/v1.0/")
+@app.route("/")
 def get_routes():
     return jsonify(routes_dict)
 
@@ -30,6 +30,7 @@ def get_routes():
 def get_country(country_name):
     # Create an SQLAlchemy engine to connect to the 'countiesdata.sqlite' database
     engine = create_engine(f"sqlite:///../database/output/countiesdata.sqlite")
+    conn = engine.connect()
     # Create a session to work with the database
     session = Session(bind=engine)
     # reflect an existing database into a new model
@@ -67,19 +68,22 @@ def get_country(country_name):
 # Define a route to get a list of all available countries
 @app.route("/api/v1.0/allcountries")
 def allcountries():
+    
     # Create an SQLAlchemy engine to connect to the 'countiesdata.sqlite' database
     engine = create_engine(f"sqlite:///../database/output/countiesdata.sqlite")
+    conn = engine.connect()
     # Create a session to work with the database
     session = Session(bind=engine)
-    # reflect an existing database into a new model
+    # # reflect an existing database into a new model
     Base = automap_base()
 
-    # reflect the tables
+    # # reflect the tables
     Base.prepare(autoload_with=engine)
 
     # View all of the classes that automap found
-    Base.classes.keys()
-
+    # return("this is my countries")
+    # return(Base.classes.keys())
+    
     # Save references to each table
     CountryData = Base.classes.country_data
 
