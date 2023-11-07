@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from flask_cors import CORS
 from sqlalchemy.ext.automap import automap_base
 
 #Create an app, being sure to pass __name__
@@ -8,7 +9,7 @@ from sqlalchemy.ext.automap import automap_base
 # Flask Setup
 ################################################# 
 app = Flask(__name__)
-
+CORS(app)
 # Define a dictionary of routes and their descriptions
 routes_dict = {
     "/api/v1.0/": "Return a JSON list of routes.",
