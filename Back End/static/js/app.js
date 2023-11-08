@@ -54,35 +54,44 @@ let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 // Initialize the page
 function init() {
     // Fetch the JSON data from the above URL
-    d3.json(url).then(data => {("Fetched data:", data);
-        // Extract the list of OTU IDs
-        let ctrylist = data;
-        console.log(ctrylist)
+    d3.json(url).then(data => {
+        // Extract the list of country data
+        let countryData = data;
+
+        // Iterate through the country data and create a dictionary
+        let countryInfo = {};
+        for (let countryName in countryData) {
+            let country = countryData[countryName];
+            countryInfo[countryName] = {
+                "booster_doses_per_100people": country.booster_doses_per_100people,
+                "country_name": country.country_name,
+                "gdp_2015": country.gdp_2015,
+                "gdp_2016": country.gdp_2016,
+                "gdp_2017": country.gdp_2017,
+                "gdp_2018": country.gdp_2018,
+                "gdp_2019": country.gdp_2019,
+                "lat": country.lat,
+                "lon": country.lon,
+                "new_deaths": country.new_deaths,
+                "newly_confirmed_cases": country.newly_confirmed_cases,
+                "newly_recovered_cases": country.newly_recovered_cases,
+                "total_confirmed_cases": country.total_confirmed_cases,
+                "total_deaths": country.total_deaths,
+                "total_recovered_cases": country.total_recovered_cases,
+                "total_vaccine_doses_administered_per_100population": country.total_vaccine_doses_administered_per_100population
+            };
+        }
+        let countryNames = data.names;
         
-    //     // Select the OTU dropdown element
-    //     let otuDropdown = d3.select("#selDataset");
+        // Now, countryNames contains the list of country names
+        console.log(countryNames);
 
-    //     // Populate the dropdown options with OTU values
-    //     for (let i = 0; i < otuIds.length; i++) {
-    //         let otuId = otuIds[i];
-    //         let option = otuDropdown.append("option");
-    //         option.property("value", otuId);
-    //         option.text(`OTU ${otuId}`);
-    //     }
-
-    //     // Define event for dropdown change and call the function to update charts
-    //     otuDropdown.on("change", function() {
-    //         let selectedOTU = otuDropdown.property("value");
-    //         dropdownChange(data, selectedOTU); 
-    //     });
-
-    //     // Create the initial bar chart and bubble chart with the first OTU
-    //     top10recoverepie(data, otuIds[0]);
-    //     top10death(data, otuIds[0]);
-    //     SNHameshphiermostdeath(data, otuIds[0]);
-    //     top10vaccination(data, otuIds[0]);
+        // You can now access country information like this:
+        let afghanistanInfo = countryInfo["Albania"];
+        console.log(afghanistanInfo);
     });
 }
+
 
 // Call the initialization function
 init();

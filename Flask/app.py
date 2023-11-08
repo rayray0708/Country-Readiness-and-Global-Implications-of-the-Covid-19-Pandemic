@@ -98,13 +98,46 @@ def allcountries():
     all_countries = session.query(CountryData.country_name).distinct().all()
 
     # Extract the country names from the query results
-    allcountries = [row.country_name for row in all_countries]
+    # allcountries = [row.country_name for row in all_countries]
+    # Initialize an empty dictionary to store country data
+    country_data_dict = {}
+
+    # Create a list of all country names
+    country_names = [row[0] for row in all_countries]
+
+    # Add the list of country names to the dictionary
+    country_data_dict['names'] = country_names
+
+    # Iterate through the country data and add it to the dictionary
+    for row in all_countries:
+        country_name = row[0]
+        country_data = session.query(CountryData).filter_by(country_name=country_name).first()
+
+        if country_data:
+            country_data_dict[country_name] = {
+                "country_name": country_data.country_name,
+                "gdp_2015": country_data.gdp_2015,
+                "gdp_2016": country_data.gdp_2016,
+                "gdp_2017": country_data.gdp_2017,
+                "gdp_2018": country_data.gdp_2018,
+                "gdp_2019": country_data.gdp_2019,
+                "booster_doses_per_100people": country_data.booster_doses_per_100people,
+                "total_vaccine_doses_administered_per_100population": country_data.total_vaccine_doses_administered_per_100population,
+                "total_confirmed_cases": country_data.total_confirmed_cases,
+                "newly_confirmed_cases": country_data.newly_confirmed_cases,
+                "total_deaths": country_data.total_deaths,
+                "new_deaths": country_data.new_deaths,
+                "total_recovered_cases": country_data.total_recovered_cases,
+                "newly_recovered_cases": country_data.newly_recovered_cases,
+                "lat": country_data.lat,
+                "lon": country_data.lon
+            }
 
     # Close the session to release resources
     session.close()
 
     # Return the list of all distinct country names as a JSON response
-    return jsonify(allcountries)
+    return jsonify(country_data_dict)
 
 # Main behavior
 if __name__ == "__main__":
