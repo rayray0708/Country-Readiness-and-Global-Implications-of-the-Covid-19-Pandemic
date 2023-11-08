@@ -53,13 +53,19 @@ def get_country(country_name):
         # Convert the data to a dictionary for easy JSON serialization
     country_data_dict = {
         "country_name": country_data.country_name,
+        "gdp_2015": country_data.gdp_2015,
+        "gdp_2016": country_data.gdp_2016,
+        "gdp_2017": country_data.gdp_2017,
+        "gdp_2018": country_data.gdp_2018,
+        "gdp_2019": country_data.gdp_2019,
+        "booster_doses_per_100people": country_data.booster_doses_per_100people,
+        "total_vaccine_doses_administered_per_100population": country_data.total_vaccine_doses_administered_per_100population,
         "total_confirmed_cases": country_data.total_confirmed_cases,
         "newly_confirmed_cases": country_data.newly_confirmed_cases,
         "total_deaths": country_data.total_deaths,
         "new_deaths": country_data.new_deaths,
         "total_recovered_cases": country_data.total_recovered_cases,
         "newly_recovered_cases": country_data.newly_recovered_cases,
-        "iso_code": country_data.iso_code,
         "lat": country_data.lat,
         "lon": country_data.lon
     }
