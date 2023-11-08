@@ -1,97 +1,129 @@
-// Function to create the Pie chart- top 10 recovered
-// function top10recoverepie(data, selectedOTU) {
-    
-// }
-
-
-// Function to create the Pie chart- top 10 death
-// function top10death(data, selectedOTU) {
-    
-// }
-
-// Function to create the death breakdown per Southern Northern Hemisphere
-// function SNHameshphiermostdeath(data, selectedOTU) {
-    
-// }
-
-// Function to create the top 10 vaccination-bar chart
-// function top10vaccination(data, selectedOTU) {
-    
-// }
-
-
-// // Function to handle dropdown change
-// function dropdownChange(data, selectedOTU) {
-//     top10vaccination(data, selectedOTU);
-//     SNHameshphiermostdeath(data, selectedOTU);
-//     top10death(data, selectedOTU);
-//     top10recoverepie(data, selectedOTU);
-// }
-
-// // Function to display sample metadata for the displayDemographicInfo
-// function displayDemographicInfo(data, selectedOTU) {
-//     console.log("Selected OTU data:", data); 
-//  // Find the selected OTU data from the samples array using filter
-//     let metadata = data.metadata.filter(item => item.id == selectedOTU)[0];
-//     console.log("Selected metadata:", metadata);
-
-//     let sampleMetadata = d3.select("#sample-metadata");
-
-//     // Clear any existing metadata
-//     sampleMetadata.html("");
-
-//     // Iterate through the metadata and append each key-value pair
-//     for (let [key, value] of Object.entries(metadata)) {
-//         sampleMetadata
-//             .append("p")
-//             .text(`${key}: ${value}`);
-//     }
-// }
-
 // Define the URL to fetch the data
 let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
+
+// function createBarchartMostDeaths(data, selectedCountryName) {
+
+// }
+
+
+
+// function createlinechartGDP(data, selectedCountryName) {
+
+
+// }
+
+
+// function createCountryMap(data, selectedCountryName) {
+
+
+// }
+
+
+
+
+function createpichartWithMostRecovered(data, selectedCountryName) {
+    console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
+
+    // Create an array of objects with country names and recovered cases
+    let countriesWithRecovered = [];
+    for (let countryName in data) {
+        countriesWithRecovered.push({
+            country_name: countryName,
+            total_recovered_cases: data[countryName].total_recovered_cases
+        });
+    }
+
+    // Sort the array based on total recovered cases in descending order
+    countriesWithRecovered.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
+
+    // Extract data for the selected country
+    let selectedCountryRecoveredData = countriesWithRecovered.find(country => country.country_name === selectedCountryName);
+
+    // If the selected country is found, include it in the top 10
+    if (selectedCountryRecoveredData) {
+        countriesWithRecovered.unshift(selectedCountryRecoveredData);
+    }
+
+    // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
+    let labels = countriesWithRecovered.slice(0, 11).map(country => country.country_name);
+    let values = countriesWithRecovered.slice(0, 11).map(country => country.total_recovered_cases);
+    console.log(labels);
+    console.log(values);
+
+    // Create the pie chart
+    let pieData = [{
+        values: values,
+        labels: labels,
+        type: 'pie'
+    }];
+
+    let pieLayout = {
+        title: `Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
+    };
+
+    Plotly.newPlot('pie', pieData, pieLayout);
+}
+
+// Function to handle dropdown change event
+function dropdownChange(data, selectedCountryName) {
+    displayCountryInfo(data, selectedCountryName);
+    createpichartWithMostRecovered(data, selectedCountryName);
+    // createBarchartMostDeaths(data);
+    // createlinechartGDP(data);
+    // createCountryMap(data);
+}
+
+// Function to display country info
+function displayCountryInfo(data, selectedCountryName) {
+    // Find the selected country data using the provided country name
+    let countryInfo = data[selectedCountryName];
+
+    // Clear any existing metadata
+    let sampleMetadata = d3.select("#sample-metadata");
+    sampleMetadata.html("");
+
+    // Iterate through the country information and append each key-value pair
+    for (let [key, value] of Object.entries(countryInfo)) {
+        sampleMetadata
+            .append("p")
+            .text(`${key}: ${value}`);
+    }
+}
 
 // Initialize the page
 function init() {
     // Fetch the JSON data from the above URL
     d3.json(url).then(data => {
-        // Extract the list of country data
-        let countryData = data;
+        console.log("Fetched JSON data:", data);
+        countryNames=data.names;
 
-        // Iterate through the country data and create a dictionary
-        let countryInfo = {};
-        for (let countryName in countryData) {
-            let country = countryData[countryName];
-            countryInfo[countryName] = {
-                "booster_doses_per_100people": country.booster_doses_per_100people,
-                "country_name": country.country_name,
-                "gdp_2015": country.gdp_2015,
-                "gdp_2016": country.gdp_2016,
-                "gdp_2017": country.gdp_2017,
-                "gdp_2018": country.gdp_2018,
-                "gdp_2019": country.gdp_2019,
-                "lat": country.lat,
-                "lon": country.lon,
-                "new_deaths": country.new_deaths,
-                "newly_confirmed_cases": country.newly_confirmed_cases,
-                "newly_recovered_cases": country.newly_recovered_cases,
-                "total_confirmed_cases": country.total_confirmed_cases,
-                "total_deaths": country.total_deaths,
-                "total_recovered_cases": country.total_recovered_cases,
-                "total_vaccine_doses_administered_per_100population": country.total_vaccine_doses_administered_per_100population
-            };
+        // Select the dropdown element
+        let cdrdownn = d3.select("#selDataset");
+
+        // Populate the dropdown options with country names
+        for (let i = 0; i < countryNames.length; i++) {
+            let countryName = countryNames[i];
+            let option = cdrdownn.append("option");
+            option.property("value", countryName);
+            option.text(countryName);
         }
-        let countryNames = data.names;
-        
-        // Now, countryNames contains the list of country names
-        console.log(countryNames);
 
-        // You can now access country information like this:
-        let afghanistanInfo = countryInfo["Albania"];
-        console.log(afghanistanInfo);
+        // Define event for dropdown change and call the dropdownChange function
+        cdrdownn.on("change", function () {
+            // Get the selected country value
+            let selectedCountryName = cdrdownn.property("value");
+            dropdownChange(data, selectedCountryName);
+        });
+
+        // Create the initial data and visualizations
+        let initialCountryName = Object.keys(data)[0];
+        displayCountryInfo(data, initialCountryName);
+        createpichartWithMostRecovered(data, initialCountryName);
+        // createBarchartMostDeaths(data, initialCountryName);
+        // createlinechartGDP(data, initialCountryName);
+        // createCountryMap(data, initialCountryName);
     });
 }
-
 
 // Call the initialization function
 init();
