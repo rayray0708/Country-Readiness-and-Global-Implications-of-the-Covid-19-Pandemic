@@ -68,9 +68,9 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
 function dropdownChange(data, selectedCountryName) {
     displayCountryInfo(data, selectedCountryName);
     createpichartWithMostRecovered(data, selectedCountryName);
-    // createBarchartMostDeaths(data);
-    // createlinechartGDP(data);
-    // createCountryMap(data);
+    // createBarchartMostDeaths(data,selectedCountryName);
+    // createlinechartGDP(data,selectedCountryName);
+    // createCountryMap(data,selectedCountryName);
 }
 
 // Function to display country info
