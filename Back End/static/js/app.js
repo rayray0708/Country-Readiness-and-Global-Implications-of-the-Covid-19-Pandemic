@@ -1,10 +1,63 @@
 // Define the URL to fetch the data
 let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 
-// function createBarchartMostDeaths(data, selectedCountryName) {
 
-// }
+// Create a function to plot top 10 countries w/ most deaths
+// 1. Extract data from Flask app using D3
+function createBarchartMostDeaths(data,selectedCountryName) {
+    // Create an array of objects with country names and recovered cases
+    console.log(data);
+    let countryObjects = [];
+    console.log(countryObjects);
 
+    for (let countryName in data) {
+        console.log(countryName);
+
+        countryObjects.push({
+            country_name: countryName,
+            total_deaths: data[countryName].total_deaths
+        });
+    }
+
+    // 2. Filter data for plotting
+    // Sort "countryObjects" in descending order using .sort() function based on the "Total Deaths" column
+    let sortedArray = countryObjects.sort((a,b) => b.total_deaths - a.total_deaths);
+    console.log(sortedArray);
+
+    // If the selected country is found, include it in the top 10
+    let selectedCountryDeathsData = countryObjects.find(country => country.country_name === selectedCountryName);
+    if (selectedCountryDeathsData) {
+        countryObjects.unshift(selectedCountryDeathsData);
+    }
+
+    // Slice the first 10 countries/objects using .slice() function and save them in the array "top10Countries"
+    let slicedArray = sortedArray.slice(0,11);
+    console.log(slicedArray);
+
+    // Extract the country name for each country in "top10Countries" using .map() and arrow functions and save them in "namesTop10"    
+    let namesTop10 = slicedArray.map(object => object.country_name);
+    console.log(namesTop10);
+
+    // Extract the number of "Total Deaths" for each country in "top10Countries" using .map() and arrow functions and save them in "deathsTop10"
+    let deathsTop10 = slicedArray.map(object => object.total_deaths)
+    console.log(deathsTop10);
+
+    // 3. Plot the data
+    let x_values = namesTop10;
+    let y_values = deathsTop10;
+
+    const plotData = [{
+        x: x_values,
+        y: y_values,
+        type: 'bar',
+    }];
+
+    let layout = {
+        title: `Top 10 Countries with the Most Deaths in COVID-19 Compared to ${selectedCountryName}`
+    };
+    // Update the bar chart
+    Plotly.newPlot('bar', plotData, layout);
+};
 
 
 // function createlinechartGDP(data, selectedCountryName) {
@@ -26,7 +79,11 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
 
     // Create an array of objects with country names and recovered cases
     let countriesWithRecovered = [];
+    console.log(countriesWithRecovered);
+
     for (let countryName in data) {
+        console.log(countryName);
+
         countriesWithRecovered.push({
             country_name: countryName,
             total_recovered_cases: data[countryName].total_recovered_cases
@@ -68,7 +125,7 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
 function dropdownChange(data, selectedCountryName) {
     displayCountryInfo(data, selectedCountryName);
     createpichartWithMostRecovered(data, selectedCountryName);
-    // createBarchartMostDeaths(data,selectedCountryName);
+    createBarchartMostDeaths(data,selectedCountryName);
     // createlinechartGDP(data,selectedCountryName);
     // createCountryMap(data,selectedCountryName);
 }
@@ -119,7 +176,7 @@ function init() {
         let initialCountryName = Object.keys(data)[0];
         displayCountryInfo(data, initialCountryName);
         createpichartWithMostRecovered(data, initialCountryName);
-        // createBarchartMostDeaths(data, initialCountryName);
+        createBarchartMostDeaths(data, initialCountryName);
         // createlinechartGDP(data, initialCountryName);
         // createCountryMap(data, initialCountryName);
     });
