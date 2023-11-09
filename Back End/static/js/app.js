@@ -1,6 +1,24 @@
 // Define the URL to fetch the data
 let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 
+const countryProfileMapping = {
+    booster_doses_per_100people: "Booster doses per 100 people",
+    country_name: "Country Name",
+    gdp_2015: "GDP 2015",
+    gdp_2016: "GDP 2016",
+    gdp_2017: "GDP 2017",
+    gdp_2018: "GDP 2018",
+    gdp_2019: "GDP 2019",
+    lat: "Latitude",
+    lon: "Longitude",
+    new_deaths: "New Deaths",
+    newly_confirmed_cases: "Newly Confirmed Cases",
+    newly_recovered_cases: "Newly Recovered Cases",
+    total_confirmed_cases: "Total Confirmed Cases",
+    total_deaths: "Total Deaths",
+    total_recovered_cases: "Total Recovered Cases",
+    total_vaccine_doses_administered_per_100population: "Total Vaccine Doses Administered Per 100 Population"
+  };
 
 // Create a function to plot top 10 countries w/ most deaths
 // 1. Extract data from Flask app using D3
@@ -123,25 +141,6 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
 
 // Function to handle dropdown change event
 function dropdownChange(data, selectedCountryName) {
-    
-    // Rename all fields displayed on the "Country Info" box
-    var data = JSON.parse(JSON.stringify(data).replace("lat", "Latitude")
-    .replace("lon","Longitude")
-    .replace("booster_doses_per_100people","Booster doses per 100 people")
-    .replace("country_name","Country name")
-    .replace("gdp_2015", "GDP 2015")
-    .replace("gdp_2016", "GDP 2016")
-    .replace("gdp_2017", "GDP 2017")
-    .replace("gdp_2018", "GDP 2018")
-    .replace("gdp_2019", "GDP 2019")
-    .replace("new_deaths", "New deaths")
-    .replace("newly_confirmed_cases", "New confirmed cases")
-    .replace("newly_recovered_cases", "New recovered cases")
-    .replace("total_confirmed_cases", "Total confirmed cases")
-    .replace("total_deaths", "Total deaths")
-    .replace("total_recovered_cases", "Total recovered cases")
-    .replace("total_vaccine_doses_administered_per_100population", "Total vaccine doses administered per 100 population")
-    );
     displayCountryInfo(data, selectedCountryName);
     createpichartWithMostRecovered(data, selectedCountryName);
     createBarchartMostDeaths(data,selectedCountryName);
@@ -163,18 +162,11 @@ function displayCountryInfo(data, selectedCountryName) {
     for (let [key, value] of Object.entries(countryInfo)) {
         sampleMetadata
             .append("p")
-            .text(`${key}: ${value}`);   
+            .text(`${countryProfileMapping[key]}: ${value}`);   
     }
     
 }
 
-function replace(object, source, target) {
-    return Object.assign(...Object.entries(object).map(([k, v]) => ({
-        [k === source ? target : k]: v && typeof v === 'object'
-            ? replace(v, source, target)
-            : v
-    })));
-}
 
 // Initialize the page
 function init() {
@@ -182,27 +174,6 @@ function init() {
     d3.json(url).then(data => {
         // console.log("Fetched JSON data:", data);
         countryNames=data.names;
-        
-        
-        // Rename all fields displayed on the "Country Info" box
-        var data = JSON.parse(JSON.stringify(data).replace("lat", "Latitude")
-        .replace("lon","Longitude")
-        .replace("booster_doses_per_100people","Booster doses per 100 people")
-        .replace("country_name","Country name")
-        .replace("gdp_2015", "GDP 2015")
-        .replace("gdp_2016", "GDP 2016")
-        .replace("gdp_2017", "GDP 2017")
-        .replace("gdp_2018", "GDP 2018")
-        .replace("gdp_2019", "GDP 2019")
-        .replace("new_deaths", "New deaths")
-        .replace("newly_confirmed_cases", "New confirmed cases")
-        .replace("newly_recovered_cases", "New recovered cases")
-        .replace("total_confirmed_cases", "Total confirmed cases")
-        .replace("total_deaths", "Total deaths")
-        .replace("total_recovered_cases", "Total recovered cases")
-        .replace("total_vaccine_doses_administered_per_100population", "Total vaccine doses administered per 100 population")
-        );
-        
         
         // Select the dropdown element
         let cdrdownn = d3.select("#selDataset");
