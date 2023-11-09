@@ -18,9 +18,7 @@ let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 
 // }
 
-
-
-
+// Create the pie chart using Plotly library
 function createpichartWithMostRecovered(data, selectedCountryName) {
     console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
 
@@ -47,8 +45,8 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
     // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
     let labels = countriesWithRecovered.slice(0, 11).map(country => country.country_name);
     let values = countriesWithRecovered.slice(0, 11).map(country => country.total_recovered_cases);
-    console.log(labels);
-    console.log(values);
+    console.log("Pie label:",labels);
+    console.log("Pie Values:",values);
 
     // Create the pie chart
     let pieData = [{
@@ -58,11 +56,70 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
     }];
 
     let pieLayout = {
-        title: `Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
+        title: `Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 50,
+            t: 50,
+            pad: 4
+          }
     };
 
     Plotly.newPlot('pie', pieData, pieLayout);
+
 }
+
+// // Create the pie chart using Highcarts library
+// function createpichartWithMostRecovered(data, selectedCountryName) {
+//     console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
+
+//     // Create an array of objects with country names and recovered cases
+//     let countriesWithRecovered = [];
+//     for (let countryName in data) {
+//         countriesWithRecovered.push({
+//             name: countryName,
+//             y: data[countryName].total_recovered_cases
+//         });
+//     }
+
+//     // Sort the array based on total recovered cases in descending order
+//     countriesWithRecovered.sort((a, b) => b.y - a.y);
+
+//     // Extract data for the selected country
+//     let selectedCountryRecoveredData = countriesWithRecovered.find(country => country.name === selectedCountryName);
+
+//     // If the selected country is found, include it in the top 10
+//     if (selectedCountryRecoveredData) {
+//         countriesWithRecovered.unshift(selectedCountryRecoveredData);
+//     }
+
+//     // Extract data for the top 10 or 11 countries
+//     let topCountries = countriesWithRecovered.slice(0, 11);
+
+//     // Create the pie chart
+//     Highcharts.chart('pie', {
+//         chart: {
+//             type: 'pie'
+//         },
+//         plotOptions: {
+//             pie: {
+//                 dataLabels: {
+//                     style: {
+//                         fontSize: '12px' // Adjust the font size as needed
+//                     }
+//                 }
+//             }
+//         },
+//         title: {
+//             text: `Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
+//         },
+//         series: [{
+//             name: 'Recovered Cases',
+//             data: topCountries
+//         }]
+//     });
+// }
 
 // Function to handle dropdown change event
 function dropdownChange(data, selectedCountryName) {
@@ -125,5 +182,5 @@ function init() {
     });
 }
 
-// Call the initialization function
+// Call the initialisation function
 init();
