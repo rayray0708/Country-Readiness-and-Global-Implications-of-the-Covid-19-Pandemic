@@ -3,45 +3,76 @@ let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 
 function createCountryMap(data, selectedCountryName) {
     console.log("Creating stacked chart with most vaccinated per 100 population for country:", selectedCountryName);
-      // Create an array of objects with country names and recovered cases
+    
+      // Create an array of objects with country names and vaccine per 100 people
       let countriesWithVaccine = [];
       for (let countryName in data) {
           countriesWithVaccine.push({
               country_name: countryName,
               Vaccine_per100: data[countryName].total_vaccine_doses_administered_per_100population,
-              //Booster_per100: data[countryName].booster_doses_per_100people
-          });
+              
+          });   
       }
-      // Sort the array based on total vaccine cases per in descending order
+      // Create an array of objects with country names and addtional dozes per 100 people
+      let countriesWithDose = [];
+      for (let countryName in data) {
+          countriesWithDose.push({
+              country_name: countryName,
+              Dose_per100: data[countryName].booster_doses_per_100people,
+              
+          });
+          
+      }
+      // Sort the array based on total vaccines per in descending order
     countriesWithVaccine.sort((a, b) => b.Vaccine_per100 - a.Vaccine_per100);
+    console.table(`This the mesagae ${countriesWithVaccine}`)
     // Extract data for the selected country
     let selectedCountryVaccineData = countriesWithVaccine.find(country => country.country_name === selectedCountryName);
+
+     // Sort the array based on addtional vaccine doses per in descending order
+     countriesWithDose.sort((a, b) => b.Dose_per100 - a.Dose_per100);
+     console.table(`This the mesagae ${countriesWithVaccine}`)
+     // Extract data for the selected country
+     let selectedCountryDoseData = countriesWithVaccine.find(country => country.country_name === selectedCountryName);
+
     // If the selected country is found, include it in the top 10
     if (selectedCountryVaccineData) {
         countriesWithVaccine.unshift(selectedCountryVaccineData);
     }
-    // Extract the label (country names) and values (vaccine dozes per 100) for the top 10
+    // If the selected country is found, include it in the top 10
+    if (selectedCountryDoseData) {
+        countriesWithDose.unshift(selectedCountryDoseData);
+    }
+    // Extract the label (country names) and values (vaccine per 100) for the top 10 
     let labels = countriesWithVaccine.slice(0, 11).map(country => country.country_name);
     let values = countriesWithVaccine.slice(0, 11).map(country => country.Vaccine_per100);
-    console.log("barv:",values);
-    console.log(labels)
-    let BarData = [{
-        y: values,
-        x: labels,
+    
+        // Extract the label (country names) and values (additional doses per 100) for the top 10 
+        let labels2 = countriesWithDose.slice(0, 11).map(country => country.country_name);
+        let values2 = countriesWithDose.slice(0, 11).map(country => country.Dose_per100);
+    
+    // Create the bar chart for vaccine per 100
+    let BarData = {
+         y: values,
+         x: labels,
+         name: 'Total Vaccine Doses Per 100 People',
         type: 'bar'
-    }];
-    let BarLayout = {
-        title: `Top 10 Country Vaccine per 100 population ${selectedCountryName}`,
-        yaxis: {
-            automargin: true,
-            title: 'Vaccine doses per 100'
-        },
-        xaxis: {
-            automargin: true
-        }
-        
     };
-    Plotly.newPlot('bar-chart2', BarData, BarLayout);
+
+    // Create the bar chart for additional doses per 100
+    let addtionalDose = {
+        y: values2,
+        x: labels2,
+        name: 'Additional Does Per 100 People',
+       type: 'bar'
+   };
+
+    var data = [BarData, addtionalDose]
+    let Layout = {barmode: 'group'};
+
+    // Plot Chart
+    Plotly.newPlot('bar-chart2', data, Layout);
+   
  }
 
  
