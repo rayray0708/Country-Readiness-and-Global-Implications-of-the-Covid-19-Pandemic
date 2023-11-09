@@ -6,12 +6,12 @@ let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 // 1. Extract data from Flask app using D3
 function createBarchartMostDeaths(data,selectedCountryName) {
     // Create an array of objects with country names and recovered cases
-    console.log(data);
+    // console.log(data);
     let countryObjects = [];
-    console.log(countryObjects);
+    // console.log(countryObjects);
 
     for (let countryName in data) {
-        console.log(countryName);
+        // console.log(countryName);
 
         countryObjects.push({
             country_name: countryName,
@@ -22,7 +22,7 @@ function createBarchartMostDeaths(data,selectedCountryName) {
     // 2. Filter data for plotting
     // Sort "countryObjects" in descending order using .sort() function based on the "Total Deaths" column
     let sortedArray = countryObjects.sort((a,b) => b.total_deaths - a.total_deaths);
-    console.log(sortedArray);
+    // console.log(sortedArray);
 
     // If the selected country is found, include it in the top 10
     let selectedCountryDeathsData = countryObjects.find(country => country.country_name === selectedCountryName);
@@ -32,15 +32,15 @@ function createBarchartMostDeaths(data,selectedCountryName) {
 
     // Slice the first 10 countries/objects using .slice() function and save them in the array "top10Countries"
     let slicedArray = sortedArray.slice(0,11);
-    console.log(slicedArray);
+    // console.log(slicedArray);
 
     // Extract the country name for each country in "top10Countries" using .map() and arrow functions and save them in "namesTop10"    
     let namesTop10 = slicedArray.map(object => object.country_name);
-    console.log(namesTop10);
+    // console.log(namesTop10);
 
     // Extract the number of "Total Deaths" for each country in "top10Countries" using .map() and arrow functions and save them in "deathsTop10"
     let deathsTop10 = slicedArray.map(object => object.total_deaths)
-    console.log(deathsTop10);
+    // console.log(deathsTop10);
 
     // 3. Plot the data
     let x_values = namesTop10;
@@ -75,14 +75,14 @@ function createBarchartMostDeaths(data,selectedCountryName) {
 
 
 function createpichartWithMostRecovered(data, selectedCountryName) {
-    console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
+    // console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
 
     // Create an array of objects with country names and recovered cases
     let countriesWithRecovered = [];
-    console.log(countriesWithRecovered);
+    // console.log(countriesWithRecovered);
 
     for (let countryName in data) {
-        console.log(countryName);
+        // console.log(countryName);
 
         countriesWithRecovered.push({
             country_name: countryName,
@@ -104,8 +104,8 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
     // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
     let labels = countriesWithRecovered.slice(0, 11).map(country => country.country_name);
     let values = countriesWithRecovered.slice(0, 11).map(country => country.total_recovered_cases);
-    console.log(labels);
-    console.log(values);
+    // console.log(labels);
+    // console.log(values);
 
     // Create the pie chart
     let pieData = [{
@@ -123,37 +123,87 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
 
 // Function to handle dropdown change event
 function dropdownChange(data, selectedCountryName) {
+    
+    // Rename all fields displayed on the "Country Info" box
+    var data = JSON.parse(JSON.stringify(data).replace("lat", "Latitude")
+    .replace("lon","Longitude")
+    .replace("booster_doses_per_100people","Booster doses per 100 people")
+    .replace("country_name","Country name")
+    .replace("gdp_2015", "GDP 2015")
+    .replace("gdp_2016", "GDP 2016")
+    .replace("gdp_2017", "GDP 2017")
+    .replace("gdp_2018", "GDP 2018")
+    .replace("gdp_2019", "GDP 2019")
+    .replace("new_deaths", "New deaths")
+    .replace("newly_confirmed_cases", "New confirmed cases")
+    .replace("newly_recovered_cases", "New recovered cases")
+    .replace("total_confirmed_cases", "Total confirmed cases")
+    .replace("total_deaths", "Total deaths")
+    .replace("total_recovered_cases", "Total recovered cases")
+    .replace("total_vaccine_doses_administered_per_100population", "Total vaccine doses administered per 100 population")
+    );
     displayCountryInfo(data, selectedCountryName);
     createpichartWithMostRecovered(data, selectedCountryName);
     createBarchartMostDeaths(data,selectedCountryName);
     // createlinechartGDP(data,selectedCountryName);
     // createCountryMap(data,selectedCountryName);
+    
+    
 }
 
 // Function to display country info
 function displayCountryInfo(data, selectedCountryName) {
     // Find the selected country data using the provided country name
     let countryInfo = data[selectedCountryName];
-
+    // console.log(countryInfo);
     // Clear any existing metadata
     let sampleMetadata = d3.select("#sample-metadata");
     sampleMetadata.html("");
 
-    // Iterate through the country information and append each key-value pair
     for (let [key, value] of Object.entries(countryInfo)) {
         sampleMetadata
             .append("p")
-            .text(`${key}: ${value}`);
+            .text(`${key}: ${value}`);   
     }
+    
+}
+
+function replace(object, source, target) {
+    return Object.assign(...Object.entries(object).map(([k, v]) => ({
+        [k === source ? target : k]: v && typeof v === 'object'
+            ? replace(v, source, target)
+            : v
+    })));
 }
 
 // Initialize the page
 function init() {
     // Fetch the JSON data from the above URL
     d3.json(url).then(data => {
-        console.log("Fetched JSON data:", data);
+        // console.log("Fetched JSON data:", data);
         countryNames=data.names;
-
+        
+        
+        // Rename all fields displayed on the "Country Info" box
+        var data = JSON.parse(JSON.stringify(data).replace("lat", "Latitude")
+        .replace("lon","Longitude")
+        .replace("booster_doses_per_100people","Booster doses per 100 people")
+        .replace("country_name","Country name")
+        .replace("gdp_2015", "GDP 2015")
+        .replace("gdp_2016", "GDP 2016")
+        .replace("gdp_2017", "GDP 2017")
+        .replace("gdp_2018", "GDP 2018")
+        .replace("gdp_2019", "GDP 2019")
+        .replace("new_deaths", "New deaths")
+        .replace("newly_confirmed_cases", "New confirmed cases")
+        .replace("newly_recovered_cases", "New recovered cases")
+        .replace("total_confirmed_cases", "Total confirmed cases")
+        .replace("total_deaths", "Total deaths")
+        .replace("total_recovered_cases", "Total recovered cases")
+        .replace("total_vaccine_doses_administered_per_100population", "Total vaccine doses administered per 100 population")
+        );
+        
+        
         // Select the dropdown element
         let cdrdownn = d3.select("#selDataset");
 
