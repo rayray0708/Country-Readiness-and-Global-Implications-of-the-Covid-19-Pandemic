@@ -1,16 +1,97 @@
 // Define the URL to fetch the data
 let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 
-// function createBarchartMostDeaths(data, selectedCountryName) {
+function createCountryMap(data, selectedCountryName) {
+    console.log("Creating stacked chart with most vaccinated per 100 population for country:", selectedCountryName);
+      // Create an array of objects with country names and recovered cases
+      let countriesWithVaccine = [];
+      for (let countryName in data) {
+          countriesWithVaccine.push({
+              country_name: countryName,
+              Vaccine_per100: data[countryName].total_vaccine_doses_administered_per_100population,
+              //Booster_per100: data[countryName].booster_doses_per_100people
+          });
+      }
+      // Sort the array based on total vaccine cases per in descending order
+    countriesWithVaccine.sort((a, b) => b.Vaccine_per100 - a.Vaccine_per100);
+    // Extract data for the selected country
+    let selectedCountryVaccineData = countriesWithVaccine.find(country => country.country_name === selectedCountryName);
+    // If the selected country is found, include it in the top 10
+    if (selectedCountryVaccineData) {
+        countriesWithVaccine.unshift(selectedCountryVaccineData);
+    }
+    // Extract the label (country names) and values (vaccine dozes per 100) for the top 10
+    let labels = countriesWithVaccine.slice(0, 11).map(country => country.country_name);
+    let values = countriesWithVaccine.slice(0, 11).map(country => country.Vaccine_per100);
+    console.log("barv:",values);
+    console.log(labels)
+    let BarData = [{
+        y: values,
+        x: labels,
+        type: 'bar'
+    }];
+    let BarLayout = {
+        title: `Top 10 Country Vaccine per 100 population ${selectedCountryName}`,
+        yaxis: {
+            automargin: true,
+            title: 'Vaccine doses per 100'
+        },
+        xaxis: {
+            automargin: true
+        }
+        
+    };
+    Plotly.newPlot('bar-chart2', BarData, BarLayout);
+ }
 
-// }
+ 
+function createlinechartGDP(data, selectedCountryName) {
+    console.log("Creating line chart of GDP for the most recovered cases country:", selectedCountryName);
+
+    // Create an array of objects with country names and recovered cases
+    let GDP = [];
+    for (let countryName in data) {
+        GDP.push({
+            country_name: countryName,
+            total_recovered_cases: data[countryName].total_recovered_cases,
+            GDPall: (data[countryName].gdp_2015+data[countryName].gdp_2016+data[countryName].gdp_2017+data[countryName].gdp_2018+data[countryName].gdp_2019)
+        });
+    }
+
+    // Sort the array based on total recovered cases in descending order
+    GDP.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
+
+    // Extract data for the selected country
+    let selectedCountryGDP = GDP.find(country => country.country_name === selectedCountryName);
+
+    // If the selected country is found, include it in the top 10
+    if (selectedCountryGDP) {
+        GDP.unshift(selectedCountryGDP);
+    }
+    // console.log("selectedCountryGDP:", selectedCountryGDP);
+    // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
+    let labels = GDP.slice(0, 11).map(country => country.country_name);
+    let values = GDP.slice(0, 11).map(country => country.GDPall);
+    console.log("line chart label:",labels);
+    console.log("Line chart Values:",values);
+
+    // Create the pie chart
+    let lineData = [{
+        x: labels,
+        y: values,
+        type: 'line'
+    }];
+
+    let lineLayout = {
+        title: `Total 5 years GDP of Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
+        
+    };
+
+    Plotly.newPlot('line-chart', lineData, lineLayout);
+
+}
 
 
-
-// function createlinechartGDP(data, selectedCountryName) {
-
-
-// }
 
 
 // function createCountryMap(data, selectedCountryName) {
@@ -18,116 +99,14 @@ let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 
 // }
 
-// Create the pie chart using Plotly library
-function createpichartWithMostRecovered(data, selectedCountryName) {
-    console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
-
-    // Create an array of objects with country names and recovered cases
-    let countriesWithRecovered = [];
-    for (let countryName in data) {
-        countriesWithRecovered.push({
-            country_name: countryName,
-            total_recovered_cases: data[countryName].total_recovered_cases
-        });
-    }
-
-    // Sort the array based on total recovered cases in descending order
-    countriesWithRecovered.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
-
-    // Extract data for the selected country
-    let selectedCountryRecoveredData = countriesWithRecovered.find(country => country.country_name === selectedCountryName);
-
-    // If the selected country is found, include it in the top 10
-    if (selectedCountryRecoveredData) {
-        countriesWithRecovered.unshift(selectedCountryRecoveredData);
-    }
-
-    // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
-    let labels = countriesWithRecovered.slice(0, 11).map(country => country.country_name);
-    let values = countriesWithRecovered.slice(0, 11).map(country => country.total_recovered_cases);
-    console.log("Pie label:",labels);
-    console.log("Pie Values:",values);
-
-    // Create the pie chart
-    let pieData = [{
-        values: values,
-        labels: labels,
-        type: 'pie'
-    }];
-
-    let pieLayout = {
-        title: `Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`,
-        margin: {
-            l: 50,
-            r: 50,
-            b: 50,
-            t: 50,
-            pad: 4
-          }
-    };
-
-    Plotly.newPlot('pie', pieData, pieLayout);
-
-}
-
-// // Create the pie chart using Highcarts library
-// function createpichartWithMostRecovered(data, selectedCountryName) {
-//     console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
-
-//     // Create an array of objects with country names and recovered cases
-//     let countriesWithRecovered = [];
-//     for (let countryName in data) {
-//         countriesWithRecovered.push({
-//             name: countryName,
-//             y: data[countryName].total_recovered_cases
-//         });
-//     }
-
-//     // Sort the array based on total recovered cases in descending order
-//     countriesWithRecovered.sort((a, b) => b.y - a.y);
-
-//     // Extract data for the selected country
-//     let selectedCountryRecoveredData = countriesWithRecovered.find(country => country.name === selectedCountryName);
-
-//     // If the selected country is found, include it in the top 10
-//     if (selectedCountryRecoveredData) {
-//         countriesWithRecovered.unshift(selectedCountryRecoveredData);
-//     }
-
-//     // Extract data for the top 10 or 11 countries
-//     let topCountries = countriesWithRecovered.slice(0, 11);
-
-//     // Create the pie chart
-//     Highcharts.chart('pie', {
-//         chart: {
-//             type: 'pie'
-//         },
-//         plotOptions: {
-//             pie: {
-//                 dataLabels: {
-//                     style: {
-//                         fontSize: '12px' // Adjust the font size as needed
-//                     }
-//                 }
-//             }
-//         },
-//         title: {
-//             text: `Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
-//         },
-//         series: [{
-//             name: 'Recovered Cases',
-//             data: topCountries
-//         }]
-//     });
-// }
 
 // Function to handle dropdown change event
 function dropdownChange(data, selectedCountryName) {
     displayCountryInfo(data, selectedCountryName);
     createpichartWithMostRecovered(data, selectedCountryName);
     // createBarchartMostDeaths(data,selectedCountryName);
-    // createlinechartGDP(data,selectedCountryName);
-    // createCountryMap(data,selectedCountryName);
+    createlinechartGDP(data,selectedCountryName);
+    createCountryMap(data,selectedCountryName);
 }
 
 // Function to display country info
@@ -177,8 +156,8 @@ function init() {
         displayCountryInfo(data, initialCountryName);
         createpichartWithMostRecovered(data, initialCountryName);
         // createBarchartMostDeaths(data, initialCountryName);
-        // createlinechartGDP(data, initialCountryName);
-        // createCountryMap(data, initialCountryName);
+        createlinechartGDP(data, initialCountryName);
+        createCountryMap(data, initialCountryName);
     });
 }
 
