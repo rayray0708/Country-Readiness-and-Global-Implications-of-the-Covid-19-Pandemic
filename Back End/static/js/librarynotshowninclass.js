@@ -1,6 +1,6 @@
 // Create the pie chart using Highcarts library
 function createpichartWithMostRecovered(data, selectedCountryName) {
-    console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
+    // console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
 
     // Create an array of objects with country names and recovered cases
     let countriesWithRecovered = [];
@@ -34,7 +34,7 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
             pie: {
                 dataLabels: {
                     style: {
-                        fontSize: '12px' // Adjust the font size as needed
+                        fontSize: '12px'
                     }
                 }
             }

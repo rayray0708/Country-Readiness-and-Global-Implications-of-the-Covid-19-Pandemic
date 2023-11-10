@@ -19,7 +19,7 @@ const countryProfileMapping = {
     total_recovered_cases: "Total Recovered Cases",
     total_vaccine_doses_administered_per_100population: "Total Vaccine Doses Administered Per 100 Population"
   };
-function createCountryMap(data, selectedCountryName) {
+function createCovidVaccineDoses(data, selectedCountryName) {
     // console.log("Creating stacked chart with most vaccinated per 100 population for country:", selectedCountryName);
     
       // Create an array of objects with country names and vaccine per 100 people
@@ -199,60 +199,38 @@ function createBarchartMostDeaths(data,selectedCountryName) {
 
 
 
-// function createCountryMap(data, selectedCountryName) {
+function createCountryMap(data, selectedCountryName) {
+    // Define the map centered around a specific location (e.g., world map)
+    let myMap = L.map("map", {
+        center: [-21.977357, 80.239575],
+        zoom: 3
+    });
 
+    // Add a tile layer to the map (you can choose a different tile layer)
+    let street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(myMap);
 
-// }
-
-
-
-
-function createpichartWithMostRecovered(data, selectedCountryName) {
-    // console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
-
-    // Create an array of objects with country names and recovered cases
-    let countriesWithRecovered = [];
-    // console.log(countriesWithRecovered);
-
+    // Loop through the data and add markers for each country
     for (let countryName in data) {
-        // console.log(countryName);
+        let country = data[countryName];
 
-        countriesWithRecovered.push({
-            country_name: countryName,
-            total_recovered_cases: data[countryName].total_recovered_cases
-        });
+        // Check if the country has latitude and longitude information
+        if (country.lat !== undefined && country.lon !== undefined) {
+            // Create a marker for the country
+            let marker = L.marker([country.lat, country.lon]).addTo(myMap);
+            
+            // Add a popup with country information
+            marker.bindPopup(`<b>${countryName}</b><br>${country.total_confirmed_cases} confirmed cases`);
+
+            // Highlight the selected country
+            if (countryName === selectedCountryName) {
+                marker.openPopup();
+            }
+        }
     }
-
-    // Sort the array based on total recovered cases in descending order
-    countriesWithRecovered.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
-
-    // Extract data for the selected country
-    let selectedCountryRecoveredData = countriesWithRecovered.find(country => country.country_name === selectedCountryName);
-
-    // If the selected country is found, include it in the top 10
-    if (selectedCountryRecoveredData) {
-        countriesWithRecovered.unshift(selectedCountryRecoveredData);
-    }
-
-    // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
-    let labels = countriesWithRecovered.slice(0, 11).map(country => country.country_name);
-    let values = countriesWithRecovered.slice(0, 11).map(country => country.total_recovered_cases);
-    // console.log(labels);
-    // console.log(values);
-
-    // Create the pie chart
-    let pieData = [{
-        values: values,
-        labels: labels,
-        type: 'pie'
-    }];
-
-    let pieLayout = {
-        title: `Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
-    };
-
-    Plotly.newPlot('pie', pieData, pieLayout);
 }
+
 
 // Function to handle dropdown change event
 function dropdownChange(data, selectedCountryName) {
@@ -260,6 +238,7 @@ function dropdownChange(data, selectedCountryName) {
     createpichartWithMostRecovered(data, selectedCountryName);
     createBarchartMostDeaths(data,selectedCountryName);
     createlinechartGDP(data,selectedCountryName);
+    createCovidVaccineDoses(data,selectedCountryName);
     createCountryMap(data,selectedCountryName);
 }
 
@@ -312,6 +291,7 @@ function init() {
         createpichartWithMostRecovered(data, initialCountryName);
         createBarchartMostDeaths(data, initialCountryName);
         createlinechartGDP(data, initialCountryName);
+        createCovidVaccineDoses(data, initialCountryName)
         createCountryMap(data, initialCountryName);
     });
 }
