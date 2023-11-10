@@ -1,17 +1,136 @@
 // Define the URL to fetch the data
 let url = "http://127.0.0.1:5000/api/v1.0/allcountries";
 
+function createCountryMap(data, selectedCountryName) {
+    // console.log("Creating stacked chart with most vaccinated per 100 population for country:", selectedCountryName);
+    
+      // Create an array of objects with country names and vaccine per 100 people
+      let countriesWithVaccine = [];
+      for (let countryName in data) {
+          countriesWithVaccine.push({
+              country_name: countryName,
+              Vaccine_per100: data[countryName].total_vaccine_doses_administered_per_100population,
+              
+          });   
+      }
+      // Create an array of objects with country names and addtional dozes per 100 people
+      let countriesWithDose = [];
+      for (let countryName in data) {
+          countriesWithDose.push({
+              country_name: countryName,
+              Dose_per100: data[countryName].booster_doses_per_100people,
+              
+          });
+          
+      }
+      // Sort the array based on total vaccines per in descending order
+    countriesWithVaccine.sort((a, b) => b.Vaccine_per100 - a.Vaccine_per100);
+    // console.table(`This the mesagae ${countriesWithVaccine}`)
+    // Extract data for the selected country
+    let selectedCountryVaccineData = countriesWithVaccine.find(country => country.country_name === selectedCountryName);
+
+     // Sort the array based on addtional vaccine doses per in descending order
+     countriesWithDose.sort((a, b) => b.Dose_per100 - a.Dose_per100);
+    //  console.table(`This the mesagae ${countriesWithVaccine}`)
+     // Extract data for the selected country
+     let selectedCountryDoseData = countriesWithVaccine.find(country => country.country_name === selectedCountryName);
+
+    // If the selected country is found, include it in the top 10
+    if (selectedCountryVaccineData) {
+        countriesWithVaccine.unshift(selectedCountryVaccineData);
+    }
+    // If the selected country is found, include it in the top 10
+    if (selectedCountryDoseData) {
+        countriesWithDose.unshift(selectedCountryDoseData);
+    }
+    // Extract the label (country names) and values (vaccine per 100) for the top 10 
+    let labels = countriesWithVaccine.slice(0, 11).map(country => country.country_name);
+    let values = countriesWithVaccine.slice(0, 11).map(country => country.Vaccine_per100);
+    
+        // Extract the label (country names) and values (additional doses per 100) for the top 10 
+        let labels2 = countriesWithDose.slice(0, 11).map(country => country.country_name);
+        let values2 = countriesWithDose.slice(0, 11).map(country => country.Dose_per100);
+    
+    // Create the bar chart for vaccine per 100
+    let BarData = {
+         y: values,
+         x: labels,
+         name: 'Total Vaccine Doses Per 100 People',
+        type: 'bar'
+    };
+
+    // Create the bar chart for additional doses per 100
+    let addtionalDose = {
+        y: values2,
+        x: labels2,
+        name: 'Additional Does Per 100 People',
+       type: 'bar'
+   };
+
+    var data = [BarData, addtionalDose]
+    let Layout = {barmode: 'group'};
+
+    // Plot Chart
+    Plotly.newPlot('bar-chart2', data, Layout);
+   
+ }
+
+ 
+function createlinechartGDP(data, selectedCountryName) {
+    // console.log("Creating line chart of GDP for the most recovered cases country:", selectedCountryName);
+
+    // Create an array of objects with country names and recovered cases
+    let GDP = [];
+    for (let countryName in data) {
+        GDP.push({
+            country_name: countryName,
+            total_recovered_cases: data[countryName].total_recovered_cases,
+            GDPall: (data[countryName].gdp_2015+data[countryName].gdp_2016+data[countryName].gdp_2017+data[countryName].gdp_2018+data[countryName].gdp_2019)
+        });
+    }
+
+    // Sort the array based on total recovered cases in descending order
+    GDP.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
+
+    // Extract data for the selected country
+    let selectedCountryGDP = GDP.find(country => country.country_name === selectedCountryName);
+
+    // If the selected country is found, include it in the top 10
+    if (selectedCountryGDP) {
+        GDP.unshift(selectedCountryGDP);
+    }
+    // console.log("selectedCountryGDP:", selectedCountryGDP);
+    // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
+    let labels = GDP.slice(0, 11).map(country => country.country_name);
+    let values = GDP.slice(0, 11).map(country => country.GDPall);
+    // console.log("line chart label:",labels);
+    // console.log("Line chart Values:",values);
+
+    // Create the pie chart
+    let lineData = [{
+        x: labels,
+        y: values,
+        type: 'line'
+    }];
+
+    let lineLayout = {
+        title: `Total 5 years GDP of Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
+        
+    };
+
+    Plotly.newPlot('line-chart', lineData, lineLayout);
+
+}
 
 // Create a function to plot top 10 countries w/ most deaths
 // 1. Extract data from Flask app using D3
 function createBarchartMostDeaths(data,selectedCountryName) {
     // Create an array of objects with country names and recovered cases
-    console.log(data);
+    // console.log(data);
     let countryObjects = [];
-    console.log(countryObjects);
-
+    // console.log(countryObjects);
     for (let countryName in data) {
-        console.log(countryName);
+        // console.log(countryName);
 
         countryObjects.push({
             country_name: countryName,
@@ -22,7 +141,7 @@ function createBarchartMostDeaths(data,selectedCountryName) {
     // 2. Filter data for plotting
     // Sort "countryObjects" in descending order using .sort() function based on the "Total Deaths" column
     let sortedArray = countryObjects.sort((a,b) => b.total_deaths - a.total_deaths);
-    console.log(sortedArray);
+    // console.log(sortedArray);
 
     // If the selected country is found, include it in the top 10
     let selectedCountryDeathsData = countryObjects.find(country => country.country_name === selectedCountryName);
@@ -32,15 +151,15 @@ function createBarchartMostDeaths(data,selectedCountryName) {
 
     // Slice the first 10 countries/objects using .slice() function and save them in the array "top10Countries"
     let slicedArray = sortedArray.slice(0,11);
-    console.log(slicedArray);
+    // console.log(slicedArray);
 
     // Extract the country name for each country in "top10Countries" using .map() and arrow functions and save them in "namesTop10"    
     let namesTop10 = slicedArray.map(object => object.country_name);
-    console.log(namesTop10);
+    // console.log(namesTop10);
 
     // Extract the number of "Total Deaths" for each country in "top10Countries" using .map() and arrow functions and save them in "deathsTop10"
     let deathsTop10 = slicedArray.map(object => object.total_deaths)
-    console.log(deathsTop10);
+    // console.log(deathsTop10);
 
     // 3. Plot the data
     let x_values = namesTop10;
@@ -60,11 +179,6 @@ function createBarchartMostDeaths(data,selectedCountryName) {
 };
 
 
-// function createlinechartGDP(data, selectedCountryName) {
-
-
-// }
-
 
 // function createCountryMap(data, selectedCountryName) {
 
@@ -75,14 +189,14 @@ function createBarchartMostDeaths(data,selectedCountryName) {
 
 
 function createpichartWithMostRecovered(data, selectedCountryName) {
-    console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
+    // console.log("Creating pie chart with most recovered cases for country:", selectedCountryName);
 
     // Create an array of objects with country names and recovered cases
     let countriesWithRecovered = [];
-    console.log(countriesWithRecovered);
+    // console.log(countriesWithRecovered);
 
     for (let countryName in data) {
-        console.log(countryName);
+        // console.log(countryName);
 
         countriesWithRecovered.push({
             country_name: countryName,
@@ -104,8 +218,8 @@ function createpichartWithMostRecovered(data, selectedCountryName) {
     // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
     let labels = countriesWithRecovered.slice(0, 11).map(country => country.country_name);
     let values = countriesWithRecovered.slice(0, 11).map(country => country.total_recovered_cases);
-    console.log(labels);
-    console.log(values);
+    // console.log(labels);
+    // console.log(values);
 
     // Create the pie chart
     let pieData = [{
@@ -126,8 +240,8 @@ function dropdownChange(data, selectedCountryName) {
     displayCountryInfo(data, selectedCountryName);
     createpichartWithMostRecovered(data, selectedCountryName);
     createBarchartMostDeaths(data,selectedCountryName);
-    // createlinechartGDP(data,selectedCountryName);
-    // createCountryMap(data,selectedCountryName);
+    createlinechartGDP(data,selectedCountryName);
+    createCountryMap(data,selectedCountryName);
 }
 
 // Function to display country info
@@ -151,7 +265,7 @@ function displayCountryInfo(data, selectedCountryName) {
 function init() {
     // Fetch the JSON data from the above URL
     d3.json(url).then(data => {
-        console.log("Fetched JSON data:", data);
+        // console.log("Fetched JSON data:", data);
         countryNames=data.names;
 
         // Select the dropdown element
@@ -177,10 +291,10 @@ function init() {
         displayCountryInfo(data, initialCountryName);
         createpichartWithMostRecovered(data, initialCountryName);
         createBarchartMostDeaths(data, initialCountryName);
-        // createlinechartGDP(data, initialCountryName);
-        // createCountryMap(data, initialCountryName);
+        createlinechartGDP(data, initialCountryName);
+        createCountryMap(data, initialCountryName);
     });
 }
 
-// Call the initialization function
+// Call the initialisation function
 init();
