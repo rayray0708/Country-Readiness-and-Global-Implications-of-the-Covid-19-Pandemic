@@ -1,4 +1,4 @@
-# Country readiness and global implication of Covid-19 Pandemic
+# Country readiness and global implication of the Covid-19 Pandemic
 
 # Tools
 - Flask
@@ -10,7 +10,7 @@
 
 # collaboraters
 - Kavish Naran
-- Hossien
+- Hossein Falsafi
 - Rachel Tran
 - Steve Ramasamy
 
@@ -24,11 +24,13 @@
 
 
 
-# 2-SQLite Database development 
+
+
+## 2-SQLite Database development 
 
 This database is named countiesdata.sqlite, contains information about COVID-19 and economic indicators for various countries.
 
-## Database Development
+### Database Development
 
 ### Loading Data
 - The data is loaded from "final_sorted_df.csv", which was created in data cleaning step into a Pandas DataFrame.
@@ -53,12 +55,12 @@ This database is named countiesdata.sqlite, contains information about COVID-19 
 
 
 
-#3-Flask Description
+##3-Flask Description
 
 The Flask app is designed to provide COVID-19-related data for various countries through an API. It utilises Flask for web services, SQLAlchemy for database interaction, and Flask-CORS for cross-origin support. The app offers dynamic routes to fetch information for specific countries and a route to retrieve a list of all available countries. The code establishes a connection to a SQLite database, maps its structure using SQLAlchemy, and responds with JSON data for API requests.
 
 
-## Instruction on how to make API available for Javascript
+### Instruction on how to make API available for Javascript
 1. Clone the repository to your local machine.
 2. Ensure you have Python and Flask installed.
 3. Install the required dependencies using `pip install -r requirements.txt`.
@@ -66,27 +68,27 @@ The Flask app is designed to provide COVID-19-related data for various countries
 Note: Ensure you are on the same path as the app.py is stored.
 5. Access the API routes as described below.
 
-## API Routes
+### API Routes
 - **`/`**: Returns a JSON list of available routes and their descriptions.
 - **`/api/v1.0/<country_name>`**: Get data for a specific country by providing the country name.
 - **`/api/v1.0/allcountries`**: Get a list of all available countries in the database.
 
-## Example Usage
+### Example Usage
 - To get data for a specific country: `/api/v1.0/CountryName`
 - To get a list of all available countries: `/api/v1.0/allcountries`
 
-## Note
+### Note
 - The database file is connected to the database created in previous steps (`countiesdata.sqlite`) and it should be placed in the appropriate location.
 
 
 
-# 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
+## 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
 
-# Country readiness and global implication of Covid-19 Pandemic
+### Country readiness and global implication of Covid-19 Pandemic
 
 This interactive dashboard visualises COVID-19 data, including country map, recovered cases, deaths, GDP, and vaccine doses.
 
-## Features:
+#### Features:
 
 - **Dropdown Interaction:** Users can select a country to view detailed information and visualisations will be updated to provide comparison between the selected country and other data availabe on the other graphs.
 
@@ -98,11 +100,11 @@ This interactive dashboard visualises COVID-19 data, including country map, reco
   - **Grouped Bar Chart:** Highlights the COVID-19 vaccine doses and additional doses per 100 people for selected countries.
   - **Leaflet Map:** Provides a geographical representation of COVID-19 confirmed cases for different countries.
 
-## Code Structure:
+### Code Structure:
 
 - **URL Definition:** Specifies the Flask API endpoint for data retrieval.
 - **Mapping:** Maps backend data attributes to user-friendly names for display.
-- **Visualization Functions:**
+- **Visualisation Functions:**
   - `createCovidVaccineDoses`: Generates a grouped bar chart for vaccine doses per 100 people.
   - `createlinechartGDP`: Creates a line chart comparing GDP for countries with high deaths or recoveries.
   - `createBarchartMostDeaths`: Displays a bar chart of the top 10 countries with the most deaths.
@@ -112,7 +114,7 @@ This interactive dashboard visualises COVID-19 data, including country map, reco
 
 
 
-# 6-A new JavaScript library not shown in class
+## 6-A new JavaScript library not shown in class
 
 This JavaScript code utilises the Highcharts library to generate an interactive pie chart that visualises recovered cases in the top 10 countries, including the selected country. The code is structured as a function and invoked by the init() function and HTML.
 
