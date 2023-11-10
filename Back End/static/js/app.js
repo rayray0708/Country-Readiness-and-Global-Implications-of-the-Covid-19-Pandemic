@@ -240,9 +240,9 @@ function createCountryMap(data, selectedCountryName) {
             marker.bindPopup(`<b>${countryName}</b><br>${country.total_confirmed_cases} confirmed cases`);
 
             // Highlight the selected country
-            if (countryName === selectedCountryName) {
-                marker.openPopup();
-            }
+            // if (countryName === selectedCountryName) {
+            //     marker.openPopup();
+            // }
         }
     }
 }
