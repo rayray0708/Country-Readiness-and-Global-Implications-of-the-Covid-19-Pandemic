@@ -14,7 +14,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12 jumbotron text-center">
-        <h1>Assess the global implications of the COVID-19 pandemic</h1>
+        <h1>Country readiness and global implication of Covid-19 Pandemic</h1>
         <p>Use the interactive charts below to explore the dataset</p>
       </div>
     </div>
@@ -22,7 +22,7 @@
       <div class="col-md-4">
         <div class="well">
           <h5>Country Name:</h5>
-          <select id="selDataset" onchange="displayCountryInfo(data, this.value)"></select>
+          <select id="selDataset"></select>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -35,24 +35,44 @@
         <div id="pie"></div>
       </div>
       <div class="col-md-5">
-        <div id="gauge"></div>
+        <div id="bar-chart"></div>
       </div>
     </div>
     <div class="row">
+      <div class="col-md-12"><div id="bar"></div></div>
       <div class="col-md-12">
-        <div id="bar"></div>
+        <div id="line-chart"></div>
       </div>
+      <div class="col-md-12">
+        <div id="map"></div>
+      </div>
+      <div class="col-md-12">
+        <div id="bar-chart2"></div>
     </div>
   </div>
   
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""/>
 
+  <!-- Leaflet JavaScript code -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+ crossorigin=""></script>
+  
+  <!-- D3 library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- Plotly library -->
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <!-- Highcharts JS -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+
+  <!-- JavaScript file -->
   <script src="./static/js/app.js"></script>
-  <!-- <script src="./static/js/top10recoverepie.js"></script>
-  <script src="./static/js/top10death.js"></script>
-  <script src="./static/js/SNHameshphiermostdeath.js"></script>
-  <script src="./static/js/top10vaccination.js"></script> -->
+  <script src="./static/js/librarynotshowninclass.js"></script>
 
 
 </body>
