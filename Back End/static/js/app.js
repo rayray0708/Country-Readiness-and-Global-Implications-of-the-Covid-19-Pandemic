@@ -86,7 +86,8 @@ function createCountryMap(data, selectedCountryName) {
    };
 
     var data = [BarData, addtionalDose]
-    let Layout = {barmode: 'group'};
+    let Layout = {barmode: 'group',
+    title: `Covid Vaccine Doses and Addtional Doses per 100 people ${selectedCountryName}`};
 
     // Plot Chart
     Plotly.newPlot('bar-chart2', data, Layout);
