@@ -95,54 +95,70 @@ function createCovidVaccineDoses(data, selectedCountryName) {
  }
 
  
-function createlinechartGDP(data, selectedCountryName) {
-    // console.log("Creating line chart of GDP for the most recovered cases country:", selectedCountryName);
-
-    // Create an array of objects with country names and recovered cases
+ function createlinechartGDP(data, selectedCountryName) {
+    // Create an array of objects with country names, recovered cases, deaths, and GDP
     let GDP = [];
+    let GDPRecovered = [];
+
     for (let countryName in data) {
         GDP.push({
             country_name: countryName,
             total_recovered_cases: data[countryName].total_recovered_cases,
-            GDPall: (data[countryName].gdp_2015+data[countryName].gdp_2016+data[countryName].gdp_2017+data[countryName].gdp_2018+data[countryName].gdp_2019)
+            total_deaths: data[countryName].total_deaths,
+            GDPall: (data[countryName].gdp_2015 + data[countryName].gdp_2016 + data[countryName].gdp_2017 + data[countryName].gdp_2018 + data[countryName].gdp_2019)
+        });
+
+        GDPRecovered.push({
+            country_name: countryName,
+            total_recovered_cases: data[countryName].total_recovered_cases,
+            total_deaths: data[countryName].total_deaths,
+            GDPall: (data[countryName].gdp_2015 + data[countryName].gdp_2016 + data[countryName].gdp_2017 + data[countryName].gdp_2018 + data[countryName].gdp_2019)
         });
     }
 
-    // Sort the array based on total recovered cases in descending order
-    GDP.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
+    // Sort the arrays based on total recovered cases and total deaths in descending order
+    GDP.sort((a, b) => b.total_deaths - a.total_deaths);
+    GDPRecovered.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
 
     // Extract data for the selected country
     let selectedCountryGDP = GDP.find(country => country.country_name === selectedCountryName);
+    let selectedCountryGDPRecovered = GDPRecovered.find(country => country.country_name === selectedCountryName);
 
     // If the selected country is found, include it in the top 10
     if (selectedCountryGDP) {
         GDP.unshift(selectedCountryGDP);
     }
-    // console.log("selectedCountryGDP:", selectedCountryGDP);
-    // Extract labels (country names) and values (recovered cases) for the top 10 or 11 countries
-    let labels = GDP.slice(0, 11).map(country => country.country_name);
-    let values = GDP.slice(0, 11).map(country => country.GDPall);
-    // console.log("line chart label:",labels);
-    // console.log("Line chart Values:",values);
+    if (selectedCountryGDPRecovered) {
+        GDPRecovered.unshift(selectedCountryGDPRecovered);
+    }
 
-    // Create the pie chart
+    // Extract labels (country names) and values for the top 10 or 11 countries
+    let labels = GDP.slice(0, 11).map(country => country.country_name);
+    let valuesDeaths = GDP.slice(0, 11).map(country => country.GDPall);
+    let valuesRecovered = GDPRecovered.slice(0, 11).map(country => country.GDPall);
+
+    // Create the line charts
     let lineData = [{
         x: labels,
-        y: values,
-        type: 'line'
+        y: valuesDeaths,
+        type: 'line',
+        name: 'GDP By Total Deaths'
+    }, {
+        x: labels,
+        y: valuesRecovered,
+        type: 'line',
+        name: 'GDP By Total Recovered Cases'
     }];
 
     let lineLayout = {
-        title: `Total 5 years GDP of Top 10 Country Recovered Cases Comparison with ${selectedCountryName}`
-        
+        title: `line chart showing the total GDP over 5 years before Covid for countries with the highest number of deaths/ recovered Comparison with ${selectedCountryName}`
     };
 
+    // Plot Chart for total deaths and total recovered cases on the same line chart
     Plotly.newPlot('line-chart', lineData, lineLayout);
-
 }
 
 // Create a function to plot top 10 countries w/ most deaths
-// 1. Extract data from Flask app using D3
 function createBarchartMostDeaths(data,selectedCountryName) {
     // Create an array of objects with country names and recovered cases
     // console.log(data);
