@@ -16,12 +16,12 @@
 - Steve Ramasamy
 
 # Content:
-## 1-Data Cleaning
-## 2-SQLite Database development 
-## 3-Flask Description
-## 4-Web Scrapping
-## 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
-## 6-A new JavaScript library not shown in class
+### 1-Data Cleaning
+### 2-SQLite Database development 
+### 3-Flask Description
+### 4-Web Scrapping
+### 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
+### 6-A new JavaScript library not shown in class
 
 
 ## 1-Data Cleaning
