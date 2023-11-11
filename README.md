@@ -25,7 +25,7 @@
 
 
 ## 1-Data Cleaning
-The COVID-19 data was retrieved from this API: **`https://coronavirus-smartable.p.rapidapi.com/stats/v1/global/`** . This endpoint returns a JSON that contains COVID-related that for more than 240 regions across the world. The information provided by this JSON object includes:
+The COVID-19 data was retrieved from this API: **`https://coronavirus-smartable.p.rapidapi.com/stats/v1/global/`** . This endpoint returns a JSON that contains COVID-related information for more than 240 regions across the world. The information provided by this JSON object includes:
 1. **`countryOrregion`**
 2. **`location`**: **`lon`** and **`lat`**
 3. **`provinceOrState`**
