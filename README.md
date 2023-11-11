@@ -26,17 +26,17 @@
 
 ## 1-Data Cleaning
 The COVID-19 data was retrieved from this API: **`https://coronavirus-smartable.p.rapidapi.com/stats/v1/global/`** . This endpoint returns a JSON that contains COVID-related that for more than 240 regions across the world. The information provided by this JSON object includes:
-1. **countryOrregion**
-2. **location**: **lon** and **lat**
-3. **provinceOrState**
-4. **county**
-5. **isoCode**
-6. **totalConfirmedCases**
-7. **newlyConfirmedCases**
-8. **totalDeaths**
-9. **newDeaths**
-10. **totalRecoveredCases**
-11. **newlyRecoveredCases**
+1. **`countryOrregion`**
+2. **`location`**: **`lon`** and **`lat`**
+3. **`provinceOrState`**
+4. **`county`**
+5. **`isoCode`**
+6. **`totalConfirmedCases`**
+7. **`newlyConfirmedCases`**
+8. **`totalDeaths`**
+9. **`newDeaths`**
+10. **`totalRecoveredCases`**
+11. **`newlyRecoveredCases`**
 ## 2-SQLite Database development 
 
 This database is named countiesdata.sqlite, contains information about COVID-19 and economic indicators for various countries.
