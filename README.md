@@ -123,7 +123,9 @@ This interactive dashboard visualises COVID-19 data, including country maps, rec
 - **Dropdown Change Event Handling:** Calls various visualisation functions on dropdown selection.
 - **Initialization Function (`init`):** Fetches initial data, populates dropdown and creates initial visualisations.
 
+# 4-Web Scrapping
 
+Dataset was scraped using the pandas "pd.read_html" method and cleaned in Jupyter Notebook, this datadata set was not used in the analyses.
 
 ## 6-A new JavaScript library not shown in class
 
