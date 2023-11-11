@@ -78,19 +78,19 @@ Note: Ensure you are on the same path as the app.py is stored.
 - To get a list of all available countries: `/api/v1.0/allcountries`
 
 ### Note
-- The database file is connected to the database created in previous steps (`countiesdata.sqlite`) and it should be placed in the appropriate location.
+- The database file is connected to the database created in previous steps (`countiesdata.sqlite`) and should be placed in the appropriate location.
 
 
 
-## 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
+##5- BackEnd coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
 
-### Country readiness and global implication of Covid-19 Pandemic
+### Country readiness and global implication of the Covid-19 Pandemic
 
-This interactive dashboard visualises COVID-19 data, including country map, recovered cases, deaths, GDP, and vaccine doses.
+This interactive dashboard visualises COVID-19 data, including country maps, recovered cases, deaths, GDP, and vaccine doses.
 
 #### Features:
 
-- **Dropdown Interaction:** Users can select a country to view detailed information and visualisations will be updated to provide comparison between the selected country and other data availabe on the other graphs.
+- **Dropdown Interaction:** Users can select a country to view detailed information, and visualisations will be updated to provide a comparison between the selected country and other data available on the other graphs.
 
 - **Data Fetching:** Utilizes D3.js to fetch JSON data from a Flask API endpoint.
 - **Visualization Types:**
@@ -118,4 +118,54 @@ This interactive dashboard visualises COVID-19 data, including country map, reco
 
 This JavaScript code utilises the Highcharts library to generate an interactive pie chart that visualises recovered cases in the top 10 countries, including the selected country. The code is structured as a function and invoked by the init() function and HTML.
 
+
+
+## HTML Structure
+
+
+### Head Section:
+
+- Charset and viewport meta tags.
+- Title of the webpage.
+- Link to Bootstrap CSS for styling.
+
+### Body Section:
+
+#### Container for the Entire Content:
+
+- Jumbotron with the project title and a brief description.
+
+#### Row 1:
+
+- **Column 1 (col-md-4):** Dropdown to select a country.
+- **Column 2 (col-md-8):** Map for visualization.
+
+#### Row 2:
+
+- **Column 1 (col-md-6):** Pie chart visualisation.
+- **Column 2 (col-md-6):** Stacked bar chart visualisation.
+
+#### Row 3:
+
+- **Column 1 (col-md-12 col-md-offset-1):** Line chart visualisation.
+
+#### Row 4:
+
+- **Column 1 (col-md-12):** Bar chart visualization.
+
+#### Row 5:
+
+- **Column 1 (col-md-12 col-md-offset-1):** Additional bar chart visualization.
+
+### External Libraries:
+
+- Leaflet CSS and JavaScript for map integration.
+- D3 library for data manipulation.
+- Plotly library for chart visualisations.
+- Highcharts JS and Accessibility Module for additional chart visualisations.
+
+### JavaScript Files:
+
+- `app.js`: Contains the main JavaScript code for data manipulation and chart creation.
+- `librarynotshowninclass.js`: External JavaScript library.
 
