@@ -15,14 +15,28 @@
 - Rachel Tran
 - Steve Ramasamy
 
-# Sections:
-# 1-Data Cleaning
-# 2-SQLite Database development 
-# 3-Flask Description
-# 4-Web scrapping
-# 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
-# 6-A new JavaScript library not shown in class
+# Content:
+## 1-Data Cleaning
+## 2-SQLite Database development 
+## 3-Flask Description
+## 4-Web Scrapping
+## 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
+## 6-A new JavaScript library not shown in class
 
+
+## 1-Data Cleaning
+The COVID-19 data was retrieved from this API: **`https://coronavirus-smartable.p.rapidapi.com/stats/v1/global/`** . This endpoint returns a JSON that contains COVID-related that for more than 240 regions across the world. The information provided by this JSON object includes:
+1. **countryOrregion**
+2. **location**: **lon** and **lat**
+3. **provinceOrState**
+4. **county**
+5. **isoCode**
+6. **totalConfirmedCases**
+7. **newlyConfirmedCases**
+8. **totalDeaths**
+9. **newDeaths**
+10. **totalRecoveredCases**
+11. **newlyRecoveredCases**
 ## 2-SQLite Database development 
 
 This database is named countiesdata.sqlite, contains information about COVID-19 and economic indicators for various countries.
@@ -92,7 +106,7 @@ This interactive dashboard visualises COVID-19 data, including country map, reco
 - **Data Fetching:** Utilizes D3.js to fetch JSON data from a Flask API endpoint.
 - **Visualization Types:**
   - **Pie Chart:** Displays the percentage of recovered cases for the selected country.
-  - **Bar Chart:** Illustrates the top countries with the most deaths and the country's position among them.
+  - **Bar Chart:** Illustrates the top 10 countries with the most deaths compared to a selected country's (from the drop-down menu).
   - **Line Chart:** Compares the total GDP over five years for countries with the highest deaths or recovered cases.
   - **Grouped Bar Chart:** Highlights the COVID-19 vaccine doses and additional doses per 100 people for selected countries.
   - **Leaflet Map:** Provides a geographical representation of COVID-19 confirmed cases for different countries.
