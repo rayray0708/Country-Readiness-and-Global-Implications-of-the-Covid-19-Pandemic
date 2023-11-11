@@ -1,3 +1,4 @@
+![Illustration of the COVID-19 pandemic's impact](https://www.cgdev.org/sites/default/files/styles/large/public/evans-acosta-covid-roundup-may4-wordcloud.png?itok=7wbZIaib)
 # Country readiness and global implication of the Covid-19 Pandemic
 
 # Tools
@@ -8,7 +9,7 @@
 - CSS
 - Plotly
 
-# collaboraters
+# Collaboraters
 - Kavish Naran
 - Hossein Falsafi
 - Rachel Tran
@@ -21,10 +22,6 @@
 # 4-Web scrapping
 # 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
 # 6-A new JavaScript library not shown in class
-
-
-
-
 
 ## 2-SQLite Database development 
 
@@ -55,7 +52,7 @@ This database is named countiesdata.sqlite, contains information about COVID-19 
 
 
 
-##3-Flask Description
+## 3-Flask Description
 
 The Flask app is designed to provide COVID-19-related data for various countries through an API. It utilises Flask for web services, SQLAlchemy for database interaction, and Flask-CORS for cross-origin support. The app offers dynamic routes to fetch information for specific countries and a route to retrieve a list of all available countries. The code establishes a connection to a SQLite database, maps its structure using SQLAlchemy, and responds with JSON data for API requests.
 
