@@ -113,7 +113,7 @@ function createlinechartGDP(data, selectedCountryName) {
     for (let countryName in data) {
         GDP.push({
             country_name: countryName,
-            GDPall: (data[countryName].gdp_2015 + data[countryName].gdp_2016 + data[countryName].gdp_2017 + data[countryName].gdp_2018 + data[countryName].gdp_2019)
+            GDPall: ((data[countryName].gdp_2015 + data[countryName].gdp_2016 + data[countryName].gdp_2017 + data[countryName].gdp_2018 + data[countryName].gdp_2019))/5
         });        
     }
 
