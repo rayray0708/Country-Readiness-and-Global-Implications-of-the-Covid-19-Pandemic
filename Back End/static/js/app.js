@@ -65,16 +65,19 @@ function createCovidVaccineDoses(data, selectedCountryName) {
     let labels = countriesWithVaccine.slice(0, 11).map(country => country.country_name);
     let values = countriesWithVaccine.slice(0, 11).map(country => country.Vaccine_per100);
     
-        // Extract the label (country names) and values (additional doses per 100) for the top 10 
-        let labels2 = countriesWithDose.slice(0, 11).map(country => country.country_name);
-        let values2 = countriesWithDose.slice(0, 11).map(country => country.Dose_per100);
+    // Extract the label (country names) and values (additional doses per 100) for the top 10 
+    let labels2 = countriesWithDose.slice(0, 11).map(country => country.country_name);
+    let values2 = countriesWithDose.slice(0, 11).map(country => country.Dose_per100);
     
     // Create the bar chart for vaccine per 100
-    let BarData = {
+    let BarData= {
          y: values,
          x: labels,
          name: 'Total Vaccine Doses Per 100 People',
-        type: 'bar'
+        type: 'bar',
+        marker: {
+            color: 'red'
+        }
     };
 
     // Create the bar chart for additional doses per 100
@@ -82,20 +85,27 @@ function createCovidVaccineDoses(data, selectedCountryName) {
         y: values2,
         x: labels2,
         name: 'Additional Does Per 100 People',
-       type: 'bar'
+       type: 'bar',
+       marker: {
+        color: 'green'
+    }
    };
 
-    var data = [BarData, addtionalDose]
-    let Layout = {barmode: 'group',
-    title: `Covid Vaccine Doses and Addtional Doses per 100 people ${selectedCountryName}`};
+   let layout1 = {
+        title: `Top 10 Countries by Total Vaccine Doses<br> per 100 Population compare with ${selectedCountryName}`
+    };
+    let layout2 = {
+        title: `Top 10 Countries by Additional Doses<br> per 100 Population compare with ${selectedCountryName}`
+    };
 
     // Plot Chart
-    Plotly.newPlot('bar-chart2', data, Layout);
+    Plotly.newPlot('bar-chart2', [BarData], layout1);
+    Plotly.newPlot('bar-chart1', [addtionalDose], layout2);
    
- }
+}
 
  
- function createlinechartGDP(data, selectedCountryName) {
+function createlinechartGDP(data, selectedCountryName) {
     // Create an array of objects with country names, recovered cases, deaths, and GDP
     let GDP = [];
     let GDPRecovered = [];
@@ -103,55 +113,37 @@ function createCovidVaccineDoses(data, selectedCountryName) {
     for (let countryName in data) {
         GDP.push({
             country_name: countryName,
-            total_recovered_cases: data[countryName].total_recovered_cases,
-            total_deaths: data[countryName].total_deaths,
             GDPall: (data[countryName].gdp_2015 + data[countryName].gdp_2016 + data[countryName].gdp_2017 + data[countryName].gdp_2018 + data[countryName].gdp_2019)
-        });
-
-        GDPRecovered.push({
-            country_name: countryName,
-            total_recovered_cases: data[countryName].total_recovered_cases,
-            total_deaths: data[countryName].total_deaths,
-            GDPall: (data[countryName].gdp_2015 + data[countryName].gdp_2016 + data[countryName].gdp_2017 + data[countryName].gdp_2018 + data[countryName].gdp_2019)
-        });
+        });        
     }
 
     // Sort the arrays based on total recovered cases and total deaths in descending order
-    GDP.sort((a, b) => b.total_deaths - a.total_deaths);
-    GDPRecovered.sort((a, b) => b.total_recovered_cases - a.total_recovered_cases);
+    GDP.sort((a, b) => b.GDPall - a.GDPall);
 
     // Extract data for the selected country
     let selectedCountryGDP = GDP.find(country => country.country_name === selectedCountryName);
-    let selectedCountryGDPRecovered = GDPRecovered.find(country => country.country_name === selectedCountryName);
+
 
     // If the selected country is found, include it in the top 10
     if (selectedCountryGDP) {
         GDP.unshift(selectedCountryGDP);
     }
-    if (selectedCountryGDPRecovered) {
-        GDPRecovered.unshift(selectedCountryGDPRecovered);
-    }
-
+    
     // Extract labels (country names) and values for the top 10 or 11 countries
-    let labels = GDP.slice(0, 11).map(country => country.country_name);
-    let valuesDeaths = GDP.slice(0, 11).map(country => country.GDPall);
-    let valuesRecovered = GDPRecovered.slice(0, 11).map(country => country.GDPall);
+    let labels = GDP.slice(0, 10).map(country => country.country_name);
+    let valuesGDP = GDP.slice(0, 10).map(country => country.GDPall);
+    
 
     // Create the line charts
     let lineData = [{
         x: labels,
-        y: valuesDeaths,
+        y: valuesGDP,
         type: 'line',
-        name: 'GDP By Total Deaths'
-    }, {
-        x: labels,
-        y: valuesRecovered,
-        type: 'line',
-        name: 'GDP By Total Recovered Cases'
+        name: 'Average GDP Over 5 Years'
     }];
 
     let lineLayout = {
-        title: `line chart showing the total GDP over 5 years before Covid for countries with the highest number of deaths/ recovered Comparison with ${selectedCountryName}`
+        title: `Top 10 countries with the highest average GDP over 5 years before Covid, Compared with ${selectedCountryName}`
     };
 
     // Plot Chart for total deaths and total recovered cases on the same line chart
@@ -203,7 +195,7 @@ function createBarchartMostDeaths(data,selectedCountryName) {
     const plotData = [{
         x: x_values,
         y: y_values,
-        type: 'bar',
+        type: 'bar'
     }];
 
     let layout = {
@@ -230,19 +222,26 @@ function createCountryMap(data, selectedCountryName) {
     // Loop through the data and add markers for each country
     for (let countryName in data) {
         let country = data[countryName];
-
+    
         // Check if the country has latitude and longitude information
         if (country.lat !== undefined && country.lon !== undefined) {
-            // Create a marker for the country
-            let marker = L.marker([country.lat, country.lon]).addTo(myMap);
-            
-            // Add a popup with country information
-            marker.bindPopup(`<b>${countryName}</b><br>${country.total_confirmed_cases} confirmed cases`);
-
-            // Highlight the selected country
-            // if (countryName === selectedCountryName) {
-            //     marker.openPopup();
-            // }
+            // Convert lat and lon to numbers
+            let latitude = Number(country.lat);
+            let longitude = Number(country.lon);
+    
+            // Check if the conversion was successful
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+                // Create a marker for the country
+                let marker = L.marker([latitude, longitude]).addTo(myMap);
+                
+                // Add a popup with country information
+                marker.bindPopup(`<b>${countryName}</b><br>${country.total_confirmed_cases} confirmed cases`);
+    
+                // // Highlight the selected country
+                // if (countryName === selectedCountryName) {
+                //     marker.openPopup();
+                // }
+            }
         }
     }
 }
