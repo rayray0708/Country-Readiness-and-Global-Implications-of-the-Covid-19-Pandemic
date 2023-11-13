@@ -123,9 +123,15 @@ This interactive dashboard visualises COVID-19 data, including country maps, rec
 - **Dropdown Change Event Handling:** Calls various visualisation functions on dropdown selection.
 - **Initialization Function (`init`):** Fetches initial data, populates dropdown and creates initial visualisations.
 
-# 4-Web Scrapping
+## 4-Web Scrapping
 
 Dataset was scraped using the pandas "pd.read_html" method and cleaned in Jupyter Notebook, this datadata set was not used in the analyses.
+
+## 5-Back End coding that used Javascript/ HTML to develop dropdown and visualisation on a dashboard
+
+- Utilizes D3.js to fetch JSON data from a Flask API endpointadditionally populates dropdown and creates initial visualisations.
+- Calls various visualisation functions on dropdown selection.
+- This JavaScript code utilises the Highcharts library to generate an interactive pie chart that visualises recovered cases in the top 10 countries.
 
 ## 6-A new JavaScript library not shown in class
 
